@@ -1,53 +1,28 @@
-window.onload =function() {
+window.onload = function() {
+    let Country_butn = document.getElementById("country_lookup");
+    let Citi_butn = document.getElementById("city_lookup");
+    let Globally = document.getElementById("country");
+    let result = document.getElementById("result");
 
-	var button =document.getElementById('lookup');
-	var result =document.getElementById('result');
-	country =document.getElementsByTagName('input')[0];
-	all =document.getElementsByTagName('input')[1];
+    Country_butn.addEventListener('click',function(){
+        var httpRequest = new XMLHttpRequest();
+        let Global_data = Globally.value;
+        httpRequest.open('GET',"http://localhost/info2180-lab5/world.php?country=" + Global_data + "&context=none" );
+        httpRequest.send();
+        httpRequest.onreadystatechange = function(){
+            let response = httpRequest.responseText;
+            result.innerHTML = response;
+        }
+    });
 
-	button.onclick =function() {
-		ajaxFunction(); 
-		getCountry();
-	};
-};
-
-function ajaxFunction() {
-
-	if (window.XMLHttpRequest) 
-		httprequest =new XMLHttpRequest();
-	else 
-		httprequest =new ActiveXObject('Microsoft.XMLHTTP');
-}
-
-function getCountry() {
-	
-	if(all.checked ) 
-		all.setAttribute('value','true');
-
-	var url = "world.php?country="+country.value+"&all="+all.value;
-
-	httprequest.onreadystatechange = displayResults;
-	httprequest.open("GET", url);
-	httprequest.send();
-}
-
-function displayResults() {
-	
-	var output =document.getElementById('result');
-
-	if (httprequest.readyState === XMLHttpRequest.DONE) {
-		if (httprequest.status === 200) {
-		 	countryInfo =httprequest.responseText;
-
-		 	if (countryInfo[8]!=='<') {
-		 		alert(countryInfo);
-		 		output.innerHTML +='<h2> Result </h2>' +countryInfo;
-			}
-			else {
-				alert(countryInfo);
-				countryInfo ='no result found';
-				output.innerHTML ='<h2> Result </h2>' +countryInfo;
-			}
-		}
-	}
+    Citi_butn.addEventListener('click',function(){
+        var httpRequest = new XMLHttpRequest();
+        let Global_data = Globally.value;
+        httpRequest.open('GET',"http://localhost/info2180-lab5/world.php?country=" +  Global_data + "&context=cities");
+        httpRequest.send();
+        httpRequest.onreadystatechange = function(){
+            let response = httpRequest.responseText;
+            result.innerHTML = response;
+        }
+    })
 }
